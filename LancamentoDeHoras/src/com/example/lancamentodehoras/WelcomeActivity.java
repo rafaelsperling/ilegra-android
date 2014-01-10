@@ -1,11 +1,18 @@
 package com.example.lancamentodehoras;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.lancamentodehoras.adapter.AtividadeListAdapter;
+import com.example.lancamentodehoras.dao.HorasDAO;
+import com.example.lancamentodehoras.domain.Horas;
 
 public class WelcomeActivity extends Activity {
 	
@@ -33,7 +40,23 @@ public class WelcomeActivity extends Activity {
 				}
 			});
 
+	       findViewById(R.id.closeApp).setOnClickListener(new Button.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
 	}
 	
-	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		ListView list = (ListView) findViewById(R.id.listView1);
+		HorasDAO dao = new HorasDAO(getApplicationContext());
+		List<Horas> horas = dao.retrieveHoras();
+
+		list.setAdapter(new AtividadeListAdapter(getApplicationContext(),
+				R.layout.horas_item, horas));
+	}
 }
